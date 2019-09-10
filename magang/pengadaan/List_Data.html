@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>List Data</title>
+	<link rel="stylesheet" type="text/css" href="assets/Bootstrap/CSS/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="assets/DataTables/media/css/dataTables.bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="assets/DataTables/media/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/DataTables/media/css/buttons.dataTables.min.css">
+
+	<!-- Plugin DataTables -->
+	<script type="text/javascript" src="assets/js/jquery31.js"></script>
+	<script type="text/javascript" src="assets/js/jquery-table.min.js"></script>
+	<script type="text/javascript" src="assets/js/jquery-buton.min.js"></script>
+	<!-- Export to Excel, CSV, And PDF -->
+	<script type="text/javascript" src="assets/js/jszip.min.js"></script>
+	<script type="text/javascript" src="assets/js/pdf-make.min.js"></script>
+	<script type="text/javascript" src="assets/js/pdf-font.js"></script>
+	<script type="text/javascript" src="assets/js/buttons-colVis.min.js"></script>
+	<script type="text/javascript" src="assets/js/html5.min.js"></script>
+	<!-- Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
+</head>
+<body>
+		<div class="container" id="app"><br><br>
+
+				<div class="card">
+					<div class="card-header" style="background-color: #e3f2fd;">
+						 <?php include 'nav.php'; ?>
+					</div>
+
+					<div class="card-body">
+						<div>
+						<h3>List Data
+						<a href="add_data.html" class="btn btn-primary float-right">+ Add data</a><br></h3>
+						</div>
+						<hr>
+						<input type="text" v-model = "search" placeholder="Search Data here" class="form-control"></input><br>
+						<table class="table table-striped table-bordered data display" id="example" style="width:100%">
+							<thead>
+								<tr>
+									<!-- <th>No</th> -->
+									<th>Nama</th>
+									<th>Lingkungan</th>
+									<th>Register</th>
+									<th>Tanggal</th>
+									<th>Proses</th>
+									<th>No.Revisi</th>
+									<th>Option</th>
+								</tr>
+							</thead>
+							<!-- <?php $i = 1; ?> -->
+							<tbody>
+							<tr v-for="dt in filterdata">
+									<!-- <td><?php echo $i; ?></td> -->
+									<td>{{dt.data().Nama}}</td>
+									<td>{{dt.data().Lingkungan}}</td>
+									<td>{{dt.data().Register}}</td>
+									<td>{{dt.data().Tanggal}}</td>
+									<td>{{dt.data().Proses}}</td>
+									<td>{{dt.data().Revisi}}</td>
+									<td>
+										<a :href="edt(dt)" class="btn btn-primary">Edit</a>
+										 <!-- <button type="button" class="btn btn-primary" v-on:click="edt(dt)">Edit</button> -->
+            							<button type="button" class="btn btn-danger" v-on:click="del(dt)">Delete</button>
+									</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+		</div>
+
+	<script src="js/vue.js"></script>
+	<script src="app.js"></script>
+	<!-- Menampilkan Data -->
+	<script type="text/javascript">
+		var example1 = new Vue({
+	    el : '#app',
+	    data : {
+	      items : [],
+	      id : [],
+	      search: ''
+	    },
+	    created(){
+	      this.fetchdata();
+	    },
+	    methods : {
+	    	fetchdata(){
+	    		var self = this;
+	    		db.collection('data_lending').get().then((querySnapshot) => {
+					querySnapshot.forEach(doc => {
+						// self.items = snapshot.docs
+						self.items.push(doc);
+						// console.log(self.items);
+						// console.log(doc.id);
+
+					})
+	    		})
+    	},
+    	del(dt){
+    		db.collection('data_lending').doc(dt.id).delete();
+    	},
+    	edt(dt){
+    		return 'edit_data_JB.php?id='+dt.id
+    	}
+    },
+    computed: {
+    	filterdata: function(){
+    		return this.items.filter((doc) => {
+    			return doc.data().Nama.match(this.search) ||
+    			doc.data().Lingkungan.match(this.search)
+
+    		});
+    	}
+    }
+	})
+	</script>
+	<!-- untuk menampilkan table -->
+	<script type="text/javascript">
+	// $(document).ready(function() {
+ //    $('#example').DataTable( {
+ //        dom: 'Bfrtip',
+ //        buttons: [
+ //            {
+ //                extend: 'copyHtml5',
+ //                exportOptions: {
+ //                    columns: [ 0, ':visible' ]
+ //                }
+ //            },
+ //            {
+ //                extend: 'excelHtml5',
+ //                exportOptions: {
+ //                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+ //                }
+ //            },
+ //            {
+ //                extend: 'pdfHtml5',
+ //                exportOptions: {
+ //                    columns:  [ 0, 1, 2, 3, 4, 5, 6 ]
+ //                }
+ //            }
+	//         	]
+	//     } );
+	// } );
+	</script>
+</body>
+</html>

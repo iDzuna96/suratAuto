@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>List Data Tanah</title>
+	<link rel="stylesheet" type="text/css" href="assets/Bootstrap/CSS/bootstrap.css">
+	<!-- Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
+
+</head>
+<body>
+		<div class="container" id="app"><br><br>
+
+				<div class="card">
+					<div class="card-header" style="background-color: #e3f2fd;">
+						 <?php include 'nav.php'; ?>
+					</div>
+
+					<div class="card-body">
+						<div>
+						<h3>List Data Buku Tanah
+						<a href="add_data_th.php" class="btn btn-primary float-right">+ Add data</a><br></h3>
+						</div>
+						<hr>
+						<input type="text" v-model = "search" placeholder="Search Data here" class="form-control"></input><br>
+						<table class="table" style="width:100%" id="mytable">
+							<thead>
+								<tr>
+									<th style="text-align:center">Nomor Buku</th>
+									<th style="text-align:center">Lingkungan</th>
+									<th style="text-align:center">Opsi</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="c in filterdata">
+									<td style="text-align:center"><a :href="url(c)" >{{c.data().No_Buku_Tanah}}</a></td>
+									<td style="text-align:center">{{c.data().Lingkungan}}</a></td>
+									<!-- <td><a :href="url(c)">{{c.data().Nama_buku.id}}</a></td> -->
+									<!-- <td><a :href="url(c)">{{c.data().Nama_buku}}</a></td> -->
+									<td style="text-align:center">
+										<button type="button" class="btn btn-danger" v-on:click="del(c)">Delete</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+							    <nav aria-label=...>
+							      <ul class=pagination>
+							        <li id="previous-page"><a href="javascript:void(0)" aria-label=Previous><span aria-hidden=true>&laquo;</span></a></li>
+							      </ul>
+							    </nav>
+
+					</div>
+				</div>
+		</div>
+
+	<script src="js/vue.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="app.js"></script>
+	<!-- untuk menampilkan table -->
+	<script>
+	var example1 = new Vue({
+	    el : '#app',
+	    data : {
+	      items : [],
+	      id : [],
+	      search: ''
+	    },
+	    created(){
+	      this.fetchdata();
+	    },
+	    methods : {
+	    	fetchdata(){
+	    		var self = this;
+	    		db.collection('Test_buku').get().then((querySnapshot) => {
+					querySnapshot.forEach(doc => {
+						// self.items = snapshot.docs
+						self.items.push(doc);
+						console.log(self.items);
+						// console.log(doc.id);
+
+					})
+	    		})
+    	},
+    	del(c){
+    		db.collection('Test_buku').doc(c.id).delete();
+    	},
+    	url(c){
+    		return c.data().Nama_buku;
+    	}
+    },
+
+    computed: {
+    	filterdata: function(){
+    		return this.items.filter((doc) => {
+    			return doc.data().No_Buku_Tanah.match(this.search) ||
+    			doc.data().Lingkungan.match(this.search)
+    		});
+    	}
+    }
+})
+	</script>
+
+	<script>
+		var table = '#mytable'
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>List Data Mandalika</title>
+	<link rel="stylesheet" type="text/css" href="assets/Bootstrap/CSS/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="assets/DataTables/media/css/dataTables.bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="assets/DataTables/media/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/DataTables/media/css/buttons.dataTables.min.css">
+
+	<!-- Plugin DataTables -->
+	<script type="text/javascript" src="assets/js/jquery31.js"></script>
+	<script type="text/javascript" src="assets/js/jquery-table.min.js"></script>
+	<script type="text/javascript" src="assets/js/jquery-buton.min.js"></script>
+	<!-- Export to Excel, CSV, And PDF -->
+	<script type="text/javascript" src="assets/js/jszip.min.js"></script>
+	<script type="text/javascript" src="assets/js/pdf-make.min.js"></script>
+	<script type="text/javascript" src="assets/js/pdf-font.js"></script>
+	<script type="text/javascript" src="assets/js/buttons-colVis.min.js"></script>
+	<script type="text/javascript" src="assets/js/html5.min.js"></script>
+	<!-- Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
+</head>
+<body>
+		<div class="container" id="app" style="margin-left:10%; margin-right:10%"><br><br>
+
+				<div class="card">
+					<div class="card-header" style="background-color: #e3f2fd;">
+						<h3>List Data Mandalika</h3>
+					</div>
+
+					<div class="card-body">
+						<div>
+						<a href="add_dataMandalika.html" class="btn btn-primary float-right">+ Add data</a><br>
+						</div>
+						<hr>
+						<input type="text" v-model = "search" placeholder="Masukkan Nomor SU Untuk Pencarian Data" class="form-control"></input><br>
+						<table class="table table-striped table-bordered data display" id="example" style="width:100%">
+							<thead>
+								<tr>
+									<!-- <th>No</th> -->
+
+									<th style="text-align:center">No SU</th>
+									<th style="text-align:center">Tanggal SU</th>
+									<th style="text-align:center">Tahun SU</th>
+									<th style="text-align:center">Pemohon</th>
+									<th style="text-align:center">Hari Tugas</th>
+									<th style="text-align:center">Tanggal Tugas</th>
+									<th style="text-align:center">Tanggal Pembuatan</th>
+									<th style="text-align:center">Aksi</th>
+								</tr>
+							</thead>
+							<!-- <?php $i = 1; ?> -->
+							<tbody>
+							<tr v-for="dt in filterdata">
+									<!-- <td><?php echo $i; ?></td> -->
+									<td>{{dt.data().nomorSu}}</td>
+									<td>{{dt.data().tanggalSu}}</td>
+									<td>{{dt.data().tahunSu}}</td>
+									<td>{{dt.data().pemohon}}</td>
+									<td>{{dt.data().hariTu}}</td>
+									<td>{{dt.data().tanggalTu}}</td>
+									<td>{{dt.data().tanggalPe}}</td>
+									<td>
+										<a :href="prt(dt)" class="btn btn-primary">Print</a>
+										 <!-- <button type="button" class="btn btn-primary" v-on:click="edt(dt)">Edit</button> -->
+            				<!-- <button type="button" class="btn btn-danger" v-on:click="del(dt)">Delete</button> -->
+									</td>
+							</tr>
+							</tbody>
+						</table>
+						<div>
+							<a href="index.html" class="btn btn-danger">Back</a>
+						</div>
+					</div>
+				</div>
+		</div>
+
+	<script src="js/vue.js"></script>
+	<script src="app.js"></script>
+	<!-- Menampilkan Data -->
+	<script type="text/javascript">
+		var example1 = new Vue({
+	    el : '#app',
+	    data : {
+	      items : [],
+	      id : [],
+	      search: ''
+	    },
+	    created(){
+	      this.fetchdata();
+	    },
+	    methods : {
+	    	fetchdata(){
+	    		var self = this;
+	    		db.collection('Data_SuratMandalika').get().then((querySnapshot) => {
+					querySnapshot.forEach(doc => {
+						// self.items = snapshot.docs
+						self.items.push(doc);
+						// console.log(self.items);
+						// console.log(doc.id);
+
+					})
+	    		})
+    	},
+    	del(dt){
+    		db.collection('Data_SuratMandalika').doc(dt.id).delete();
+    	},
+    	prt(dt){
+    		return 'print_dataMandalika.html?id='+dt.id
+    	}
+    },
+    computed: {
+    	filterdata: function(){
+    		return this.items.filter((doc) => {
+    			return doc.data().nomorSu.match(this.search) ||
+    			doc.data().pemohon.match(this.search)
+
+    		});
+    	}
+    }
+	})
+	</script>
+	<!-- untuk menampilkan table -->
+	<script type="text/javascript">
+	// $(document).ready(function() {
+ //    $('#example').DataTable( {
+ //        dom: 'Bfrtip',
+ //        buttons: [
+ //            {
+ //                extend: 'copyHtml5',
+ //                exportOptions: {
+ //                    columns: [ 0, ':visible' ]
+ //                }
+ //            },
+ //            {
+ //                extend: 'excelHtml5',
+ //                exportOptions: {
+ //                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+ //                }
+ //            },
+ //            {
+ //                extend: 'pdfHtml5',
+ //                exportOptions: {
+ //                    columns:  [ 0, 1, 2, 3, 4, 5, 6 ]
+ //                }
+ //            }
+	//         	]
+	//     } );
+	// } );
+	</script>
+</body>
+</html>

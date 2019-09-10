@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <a class="navbar-brand" href="#">
+    <img src="icon/logo-bpn.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active <?php echo (basename($_SERVER['REQUEST_URI']) == 'List_Data.php' ? 'active' : ''); ?>">
+        <a class="nav-link" href="List_Data.php">List Data <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item <?php echo (basename($_SERVER['REQUEST_URI']) == 'List_data_tanah.php' ? 'active' : ''); ?>">
+        <a class="nav-link" href="List_data_tanah.php">List Data Tanah</a>
+      </li>
+    </ul>
+    <span class="navbar-text">
+      
+    </span>
+  </div>
+</nav>
